@@ -20,7 +20,11 @@ mutable struct ZPR
     # 内部コンストラクタ
     #---------------------------------------------------------------------
     function ZPR(n::Int64, max_eval::Int64=200) 
-        return new(n, 0, max_eval, Vector{Float64}(), Vector{Float64}(), 0.1, 1.0e-06, 0.5, Vector{Function}(), Vector{Function}(), Vector{Function}(), Vector{Function}())
+        return new(
+            n, 0, max_eval, 
+            Vector{Float64}(), Vector{Float64}(), 0.1, 1.0e-06, 0.5, 
+            Vector{Function}(), Vector{Function}(), Vector{Function}(), Vector{Function}()
+        )
     end
 end
 #--------------------------------------------------------------------------------------------------------
