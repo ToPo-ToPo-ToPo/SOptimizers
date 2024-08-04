@@ -87,16 +87,6 @@ function my_optimize(opt::MMA, physics, opt_settings, xval::Vector{Float64})
     # 初期値を計算
     f0val, df0dx, fval, dfdx = compute(opt, xval)
 
-    # フィルタリング
-    filtered_x = filtering(opt_settings.filter, xval)
-    # vtkファイルに結果を書き出し
-    vtk_name = physics.output_file_name * "_mma_" * string(outeriter)
-    vtk_datasets = []
-    push!(vtk_datasets, VtkDataset("design_variables", "CellData", xval))
-    push!(vtk_datasets, VtkDataset("topology", "CellData", filtered_x))
-    push!(vtk_datasets, VtkDataset("objective_sensitivity", "CellData", df0dx))
-    output_vtu(physics.nodes, physics.elements, vtk_datasets, vtk_name)
-
     # The iterations start:
     kktnorm = kkttol + 10
     outit = 0
@@ -133,15 +123,6 @@ function my_optimize(opt::MMA, physics, opt_settings, xval::Vector{Float64})
         end
         @printf("%3d      %.6e     %.6e     %.6e\n", outit, f0val, kktnorm, norm(xmma-xold1))
         
-        # フィルタリング
-        filtered_x = filtering(opt_settings.filter, xval)
-        # vtkファイルに結果を書き出し
-        vtk_name = physics.output_file_name * "_mma_" * string(outeriter)
-        vtk_datasets = []
-        push!(vtk_datasets, VtkDataset("design_variables", "CellData", xval))
-        push!(vtk_datasets, VtkDataset("topology", "CellData", filtered_x))
-        push!(vtk_datasets, VtkDataset("objective_sensitivity", "CellData", df0dx))
-        output_vtu(physics.nodes, physics.elements, vtk_datasets, vtk_name)
     end
 
     return f0val, xval
